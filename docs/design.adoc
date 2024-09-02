@@ -1,0 +1,32 @@
+= Poker Face Off
+== Gedankensammlung
+* 5 Card Poker Hände vergleichen
+* Es sind nur 2 Hände gegeneinander zu vergleichen
+** Keine Side Pots möglich, welche erst ab 3 Spielern relevant werden
+** Farben sind nicht sortiert und alle gleichwertig
+* Partielle Ordnung, daher kommt Comparable nicht in Frage für die Hände direkt
+* Strategie Pattern um die Hände zu analysieren
+** isInstance()
+** order()
+*** Legt Sortierung der Wertigkeit fest
+*** Höhere Wertigkeit schlägt niedrigere Wertigkeit
+** score()
+*** Vergleicht zwei Hände und bestimmt das Ergebnis
+** Enum?
+*** Liegt
+* Analyse muss von High nach Low geschehen um den höchsten Wert zu bestimmen
+* Dynamische Programmierung anwendbar?
+* Längste Sequenz finden um eine Straße zu finden
+** Sortierung nach den Werten
+** Alles die gleiche Farbe?
+* Result (Enum)
+** Higher
+** Lower
+** Split
+* Records verwenden für Karten, da diese sich nicht verändern dürfen und
+* Unit Testing mit Fuzzing
+
+== Zeitplanung
+* 1h Analyse und Konzeption
+* 1h Implementierung
+* 1h Unit Tests
