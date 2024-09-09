@@ -30,4 +30,5 @@ public enum HandType {
   public String getFullName() {
     return fullName;
   }
+
 }

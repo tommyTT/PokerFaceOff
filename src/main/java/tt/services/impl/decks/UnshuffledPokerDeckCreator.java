@@ -1,4 +1,4 @@
-package tt.services.impl;
+package tt.services.impl.decks;
 
 import tt.models.Card;
 import tt.models.CardSuit;
@@ -6,8 +6,10 @@ import tt.models.CardValue;
 import tt.models.PokerDeck;
 import tt.services.DeckCreator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Create an unshuffled poker deck.
@@ -28,7 +30,7 @@ public class UnshuffledPokerDeckCreator implements DeckCreator {
   private static List<Card> generateCards() {
     return Arrays.stream(CardSuit.values())
         .flatMap(suit -> Arrays.stream(CardValue.values()).map(value -> new Card(value, suit)))
-        .toList();
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   /**

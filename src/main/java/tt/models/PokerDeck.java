@@ -1,9 +1,6 @@
 package tt.models;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Specifies a deck of 52 cards for playing poker. The order of the cards is fixed!
@@ -33,7 +30,7 @@ public class PokerDeck implements Iterable<Card> {
     }
 
     // check if there are any duplicates
-    Set<Card> cardsAsSet = Set.copyOf(cards);
+    Set<Card> cardsAsSet = new HashSet<>(cards);
     if (cardsAsSet.size() != 52) {
       throw new IllegalArgumentException("There cannot be any duplicate cards in the deck!");
     }

@@ -1,4 +1,4 @@
-package tt.services.impl;
+package tt.services.impl.decks;
 
 import tt.models.Card;
 

@@ -1,13 +1,64 @@
 package tt.models;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
 /**
- * Defines a hand of 5 card for poker. The order of the cards is irrelevant!
- *
- * @param card1 the first card
- * @param card2 the second card
- * @param card3 the third card
- * @param card4 the fourth card
- * @param card5 the fifth card
+ * Defines a hand of card for poker. The order of the cards is irrelevant!
  */
-public record Hand(Card card1, Card card2, Card card3, Card card4, Card card5) {
+public class Hand {
+  private final Card[] cards;
+  private final HandType type;
+
+  private Hand(HandType type, Card[] cards) {
+    this.cards = cards;
+    this.type = type;
+  }
+
+  /**
+   * Create a new Hand of poker from the given cards. There must be exactly 5 cards
+   *
+   * @param type  the type
+   * @param cards the cards
+   * @return the hand
+   */
+  public static Hand of(HandType type, List<Card> cards) {
+    var cardsAsSet = new HashSet<>(cards);
+    if (cardsAsSet.size() != 5) {
+      throw new IllegalArgumentException("must have exactly 5 distinct cards");
+    } else if (cardsAsSet.contains(null)) {
+      throw new IllegalArgumentException("all cards must not be null");
+    }
+
+    return new Hand(type, cardsAsSet.toArray(Card[]::new));
+  }
+
+  /**
+   * Returns the type of hand that is represented by the cards.
+   *
+   * @return the type
+   */
+  public HandType getType() {
+    return type;
+  }
+
+  /**
+   * Returns the cards in this hand. There is no order to the cards!
+   *
+   * @return the cards
+   */
+  public List<Card> getCards() {
+    return Arrays.asList(cards);
+  }
+
+  /**
+   * Returns the highest card value
+   *
+   * @return the highest card value in this hand
+   */
+  public CardValue getHighestCardValue() {
+    return getCards().stream().map(Card::value).max(Comparator.naturalOrder()).orElseThrow();
+  }
 }
