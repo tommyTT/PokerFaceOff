@@ -3,6 +3,7 @@ package tt.services.impl.hands.strategies;
 import tt.models.*;
 import tt.services.impl.hands.HandTypeStrategy;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class TwoPairStrategy implements HandTypeStrategy {
       return of(hand.getCards());
     }
 
-    public static Optional<TwoPairHand> of(List<Card> cards) {
+    public static Optional<TwoPairHand> of(Collection<Card> cards) {
       Map<CardValue, List<Card>> byValue = groupCardsByValue(cards);
 
       CardValue highPair = null;
@@ -61,7 +62,7 @@ public class TwoPairStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     return TwoPairHand.of(cards).isPresent();
   }
 

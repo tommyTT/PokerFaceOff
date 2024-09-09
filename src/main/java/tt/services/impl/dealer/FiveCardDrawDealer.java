@@ -2,12 +2,14 @@ package tt.services.impl.dealer;
 
 import tt.models.Hand;
 import tt.models.HandType;
+import tt.models.Player;
 import tt.models.PokerDeck;
 import tt.services.Dealer;
 import tt.services.DeckCreator;
 import tt.services.HandTypeAnalyzer;
 import tt.util.Tuple;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class FiveCardDrawDealer implements Dealer {
   }
 
   @Override
-  public List<Hand> deal(int numberOfPlayers) {
+  public List<Player> deal(int numberOfPlayers) {
     if (numberOfPlayers < 2 || numberOfPlayers > 7) {
       throw new IllegalArgumentException(
           ("Five card draw can only be played by 2 to 7 players! You tried to start a game with " + "%d" + " players!").formatted(
@@ -42,26 +44,32 @@ public class FiveCardDrawDealer implements Dealer {
         .stream()
         .map(tuples -> {
           var cards = tuples.stream().map(Tuple::second).toList();
-          return analyzer.createHand(cards);
+          return new Player("Player " + (tuples.getFirst().first() + 1),
+              analyzer.createHand(cards));
         })
         .toList();
   }
 
   @Override
-  public List<Hand> showdown(List<Hand> hands) {
-    Map<HandType, List<Hand>> handsByType = hands.stream()
-        .collect(Collectors.groupingBy(Hand::getType));
+  public List<Player> showdown(List<Player> players) {
+    Map<HandType, List<Player>> handsByType = players.stream()
+        .collect(Collectors.groupingBy(player -> player.hand().getType()));
 
     HandType winningHandType = handsByType.keySet()
         .stream()
         .max(Comparator.comparing(HandType::ordinal))
         .orElseThrow();
 
-    List<Hand> potentialWinners = handsByType.get(winningHandType);
+    List<Player> potentialWinners = handsByType.get(winningHandType);
     return tiebreaker(potentialWinners);
   }
 
-  private List<Hand> tiebreaker(List<Hand> potentialWinners) {
-    return analyzer.tiebreak(potentialWinners);
+  private List<Player> tiebreaker(List<Player> potentialWinners) {
+    Map<Hand, List<Player>> playersByHand = potentialWinners.stream()
+        .collect(Collectors.groupingBy(Player::hand));
+    Collection<Hand> winningHands = analyzer.tiebreak(playersByHand.keySet());
+    return potentialWinners.stream()
+        .filter(player -> winningHands.contains(player.hand()))
+        .toList();
   }
 }

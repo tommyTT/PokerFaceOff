@@ -39,7 +39,7 @@ public class DefaultHandTypeAnalyzer implements HandTypeAnalyzer {
   }
 
   @Override
-  public Hand createHand(List<Card> cards) {
+  public Hand createHand(Collection<Card> cards) {
     if (cards == null || cards.size() != 5) {
       throw new IllegalArgumentException("must provide exactly 5 cards");
     }
@@ -48,7 +48,7 @@ public class DefaultHandTypeAnalyzer implements HandTypeAnalyzer {
     return Hand.of(getHandType(cards), cards);
   }
 
-  private HandType getHandType(List<Card> cards) {
+  private HandType getHandType(Collection<Card> cards) {
     return Arrays.asList(HandType.values()).reversed().stream().filter(type -> {
       HandTypeStrategy strategy = strategies.get(type);
       return strategy.matches(cards);
@@ -56,15 +56,15 @@ public class DefaultHandTypeAnalyzer implements HandTypeAnalyzer {
   }
 
   @Override
-  public List<Hand> tiebreak(List<Hand> hands) {
+  public Collection<Hand> tiebreak(Collection<Hand> hands) {
     if (hands.size() <= 1) {
       // none or one hand, so all hands win
       return hands;
     } else if (hands.stream().map(Hand::getType).distinct().count() != 1) {
-      throw new IllegalArgumentException("only hands of a single type can be tiebroken");
+      throw new IllegalArgumentException("only hands of a single type can be tie-broken");
     }
 
-    // do the tiebreaking procedure
+    // do the tie-breaking procedure
     return hands.stream()
         .map(List::of)
         .reduce(Collections.emptyList(), (winningHands, nextHands) -> {
@@ -95,7 +95,7 @@ public class DefaultHandTypeAnalyzer implements HandTypeAnalyzer {
    * @param cards    the cards that form the hand
    * @return true if the cards match the type of the hand
    */
-  public boolean isType(HandType handType, List<Card> cards) {
+  public boolean isType(HandType handType, Collection<Card> cards) {
     return strategies.get(handType).matches(cards);
   }
 

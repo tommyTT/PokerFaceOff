@@ -4,10 +4,7 @@ import tt.models.Card;
 import tt.models.CardSuit;
 import tt.models.CardValue;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +21,7 @@ public class CardUtils {
    * @param cards the cards
    * @return a map of the cards grouped by their value
    */
-  public static Map<CardValue, List<Card>> groupCardsByValue(List<Card> cards) {
+  public static Map<CardValue, List<Card>> groupCardsByValue(Collection<Card> cards) {
     return cards.stream().collect(Collectors.groupingBy(Card::value));
   }
 
@@ -34,7 +31,7 @@ public class CardUtils {
    * @param cards the cards
    * @return a map of the cards grouped by their suit
    */
-  public static Map<CardSuit, List<Card>> groupCardsBySuit(List<Card> cards) {
+  public static Map<CardSuit, List<Card>> groupCardsBySuit(Collection<Card> cards) {
     return cards.stream().collect(Collectors.groupingBy(Card::suit));
   }
 

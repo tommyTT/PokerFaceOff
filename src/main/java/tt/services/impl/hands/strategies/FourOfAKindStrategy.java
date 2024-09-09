@@ -3,6 +3,7 @@ package tt.services.impl.hands.strategies;
 import tt.models.*;
 import tt.services.impl.hands.HandTypeStrategy;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class FourOfAKindStrategy implements HandTypeStrategy {
       return of(hand.getCards());
     }
 
-    private static Optional<FourOfAKindHand> of(List<Card> cards) {
+    private static Optional<FourOfAKindHand> of(Collection<Card> cards) {
       Map<CardValue, List<Card>> byValue = groupCardsByValue(cards);
       if (byValue.size() != 2) {
         // must have exactly two distinct values, otherwise this can't be four of a kind
@@ -53,7 +54,7 @@ public class FourOfAKindStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     return FourOfAKindHand.of(cards).isPresent();
   }
 

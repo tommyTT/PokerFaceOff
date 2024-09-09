@@ -3,11 +3,12 @@ package tt.services.impl.hands.strategies;
 import tt.models.*;
 import tt.services.impl.hands.HandTypeStrategy;
 
+import java.util.Collection;
 import java.util.List;
 
 public class StraightStrategy implements HandTypeStrategy {
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     // there must be 5 cards
     if (cards.size() != 5) {
       return false;

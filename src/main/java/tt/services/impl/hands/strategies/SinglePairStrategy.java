@@ -18,7 +18,7 @@ public class SinglePairStrategy implements HandTypeStrategy {
       return of(hand.getCards());
     }
 
-    public static Optional<SinglePairHand> of(List<Card> cards) {
+    public static Optional<SinglePairHand> of(Collection<Card> cards) {
       Map<CardValue, List<Card>> byValue = groupCardsByValue(cards.stream().distinct().toList());
 
       CardValue thePair = null;
@@ -51,7 +51,7 @@ public class SinglePairStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     return SinglePairHand.of(cards).isPresent();
   }
 

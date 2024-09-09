@@ -1,9 +1,8 @@
 package tt.models;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Defines a hand of card for poker. The order of the cards is irrelevant!
@@ -24,7 +23,7 @@ public class Hand {
    * @param cards the cards
    * @return the hand
    */
-  public static Hand of(HandType type, List<Card> cards) {
+  public static Hand of(HandType type, Collection<Card> cards) {
     var cardsAsSet = new HashSet<>(cards);
     if (cardsAsSet.size() != 5) {
       throw new IllegalArgumentException("must have exactly 5 distinct cards");
@@ -61,4 +60,11 @@ public class Hand {
   public CardValue getHighestCardValue() {
     return getCards().stream().map(Card::value).max(Comparator.naturalOrder()).orElseThrow();
   }
+
+  public String toPrettyString() {
+    return Stream.of(cards)
+        .map(Card::toSymbolString)
+        .collect(Collectors.joining(" "));
+  }
+
 }

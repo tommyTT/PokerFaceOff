@@ -3,7 +3,7 @@ package tt.services;
 import tt.models.Card;
 import tt.models.Hand;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface HandTypeAnalyzer {
   /**
@@ -12,7 +12,7 @@ public interface HandTypeAnalyzer {
    * @param cards the cards for the hand
    * @return the new hand of poker
    */
-  Hand createHand(List<Card> cards);
+  Hand createHand(Collection<Card> cards);
 
   /**
    * Determine the tiebreaker between the given hands of the type.
@@ -20,5 +20,5 @@ public interface HandTypeAnalyzer {
    * @param hands the hands to tiebreak
    * @return the list of hands that are winning the tiebreaker
    */
-  List<Hand> tiebreak(List<Hand> hands);
+  Collection<Hand> tiebreak(Collection<Hand> hands);
 }

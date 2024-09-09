@@ -3,6 +3,7 @@ package tt.services.impl.hands.strategies;
 import tt.models.*;
 import tt.services.impl.hands.HandTypeStrategy;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class FullHouseStrategy implements HandTypeStrategy {
       return of(hand.getCards());
     }
 
-    public static Optional<FullHouseHand> of(List<Card> cards) {
+    public static Optional<FullHouseHand> of(Collection<Card> cards) {
       Map<CardValue, List<Card>> byValue = groupCardsByValue(cards);
       if (byValue.size() != 2) {
         return Optional.empty();
@@ -53,7 +54,7 @@ public class FullHouseStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     return FullHouseHand.of(cards).isPresent();
   }
 

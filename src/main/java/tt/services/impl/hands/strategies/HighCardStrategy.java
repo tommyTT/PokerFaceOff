@@ -5,6 +5,7 @@ import tt.services.impl.hands.DefaultHandTypeAnalyzer;
 import tt.services.impl.hands.HandTypeStrategy;
 import tt.util.CardUtils;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class HighCardStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     // there must be 5 cards in the deck
     if (cards.size() != 5) {
       return false;

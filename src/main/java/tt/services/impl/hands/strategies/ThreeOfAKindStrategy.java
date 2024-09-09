@@ -2,6 +2,7 @@ package tt.services.impl.hands.strategies;
 
 import tt.models.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,7 +19,7 @@ public class ThreeOfAKindStrategy implements tt.services.impl.hands.HandTypeStra
       return of(hand.getCards());
     }
 
-    public static Optional<ThreeOfAKindHand> of(List<Card> cards) {
+    public static Optional<ThreeOfAKindHand> of(Collection<Card> cards) {
       Map<CardValue, List<Card>> byValue = groupCardsByValue(cards.stream().distinct().toList());
 
       CardValue triple = null;
@@ -58,7 +59,7 @@ public class ThreeOfAKindStrategy implements tt.services.impl.hands.HandTypeStra
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     return ThreeOfAKindHand.of(cards).isPresent();
   }
 

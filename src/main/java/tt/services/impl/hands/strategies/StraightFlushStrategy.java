@@ -7,7 +7,7 @@ import tt.models.ShowdownResult;
 import tt.services.impl.hands.DefaultHandTypeAnalyzer;
 import tt.services.impl.hands.HandTypeStrategy;
 
-import java.util.List;
+import java.util.Collection;
 
 public class StraightFlushStrategy implements HandTypeStrategy {
   private final DefaultHandTypeAnalyzer analyzer;
@@ -17,7 +17,7 @@ public class StraightFlushStrategy implements HandTypeStrategy {
   }
 
   @Override
-  public boolean matches(List<Card> cards) {
+  public boolean matches(Collection<Card> cards) {
     // must match both the conditions of the flush and a straight
     return analyzer.isType(HandType.FLUSH, cards) && analyzer.isType(HandType.STRAIGHT, cards);
   }
