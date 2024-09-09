@@ -1,7 +1,6 @@
 package tt.services.impl.hands.strategies;
 
 import tt.models.*;
-import tt.services.HandTypeAnalyzer;
 import tt.services.impl.hands.DefaultHandTypeAnalyzer;
 import tt.services.impl.hands.HandTypeStrategy;
 import tt.util.CardUtils;
