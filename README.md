@@ -2,6 +2,7 @@
 
 The following instructions describe how to use this program:
 
+- requires Java 21 to be installed, e.g. https://adoptium.net/de/temurin/releases/?version=21
 - the program can be run from the command line via the `tt.Main` class
 - without any arguments from the command line, the program will use a random two player game of five card draw poker and score the hands.
 - by giving an integer value as the first argument, this determines the number of players that should be playing
