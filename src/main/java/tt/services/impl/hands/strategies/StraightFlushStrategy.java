@@ -24,7 +24,7 @@ public class StraightFlushStrategy implements HandTypeStrategy {
 
   @Override
   public ShowdownResult determineTiebreakResult(Hand hand1, Hand hand2) {
-    // the same tiebreaker like the straight applies here
+    // the same tiebreaker as the straight applies here
     return analyzer.tiebreak(HandType.STRAIGHT, hand1, hand2);
   }
 }

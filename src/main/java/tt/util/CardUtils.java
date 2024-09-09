@@ -5,6 +5,7 @@ import tt.models.CardSuit;
 import tt.models.CardValue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,7 +46,11 @@ public class CardUtils {
    * @throws IllegalArgumentException if a part of the text couldn't be parsed
    */
   public static List<Card> parseCardFromString(String text) {
-    return Arrays.stream(text.split("\\s+"))
+    if (text == null || text.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return Arrays.stream(text.split("[\\s,;]+"))
         .map(token -> Card.of(token)
             .orElseThrow(() -> new IllegalArgumentException("couldn't parse input text " + text)))
         .toList();
