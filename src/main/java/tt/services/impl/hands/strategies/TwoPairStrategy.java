@@ -5,17 +5,23 @@ import tt.services.impl.hands.HandTypeStrategy;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static tt.util.CardUtils.groupCardsByValue;
 
 public class TwoPairStrategy implements HandTypeStrategy {
   private record TwoPairHand(CardValue highPair, CardValue lowPair, CardValue extraCard) {
-    public static TwoPairHand of(Hand hand) {
+    public static Optional<TwoPairHand> of(Hand hand) {
       if (hand.getType() != HandType.TWO_PAIRS) {
         throw new IllegalArgumentException(
             "this hand is of type " + hand.getType() + " but must be two pairs!");
       }
-      Map<CardValue, List<Card>> byValue = groupCardsByValue(hand.getCards());
+
+      return of(hand.getCards());
+    }
+
+    public static Optional<TwoPairHand> of(List<Card> cards) {
+      Map<CardValue, List<Card>> byValue = groupCardsByValue(cards);
 
       CardValue highPair = null;
       CardValue lowPair = null;
@@ -41,36 +47,30 @@ public class TwoPairStrategy implements HandTypeStrategy {
           extraCard = entry.getKey();
         } else {
           // something is majorly wrong
-          throw new IllegalArgumentException("illegal cards in two pair hand!");
+          return Optional.empty();
         }
       }
 
-      if (highPair == null) {
-        throw new IllegalArgumentException("no high pair found in hand!");
-      } else if (lowPair == null) {
-        throw new IllegalArgumentException("no low pair found in hand!");
-      } else if (extraCard == null) {
-        throw new IllegalArgumentException("no high card found in hand!");
+      if (highPair == null || lowPair == null || extraCard == null) {
+        return Optional.empty();
       }
 
       // return the new hand
-      return new TwoPairHand(highPair, lowPair, extraCard);
+      return Optional.of(new TwoPairHand(highPair, lowPair, extraCard));
     }
   }
 
   @Override
   public boolean matches(List<Card> cards) {
-    // group all cards by their value and count the number of cards
-    List<Integer> valueCounts = groupCardsByValue(cards).values().stream().map(List::size).toList();
-
-    // there must now be exactly 3 different distinct card values to be a hand with two pairs
-    return valueCounts.size() != 3;
+    return TwoPairHand.of(cards).isPresent();
   }
 
   @Override
   public ShowdownResult determineTiebreakResult(Hand hand1, Hand hand2) {
-    TwoPairHand twoPairHand1 = TwoPairHand.of(hand1);
-    TwoPairHand twoPairHand2 = TwoPairHand.of(hand2);
+    TwoPairHand twoPairHand1 = TwoPairHand.of(hand1)
+        .orElseThrow(() -> new IllegalArgumentException("hand 1 is not two pairs!"));
+    TwoPairHand twoPairHand2 = TwoPairHand.of(hand2)
+        .orElseThrow(() -> new IllegalArgumentException("hand 2 is not two pairs!"));
 
     // compare the first pairs
     ShowdownResult resultHigherPair = twoPairHand1.highPair().compareWith(twoPairHand2.highPair());

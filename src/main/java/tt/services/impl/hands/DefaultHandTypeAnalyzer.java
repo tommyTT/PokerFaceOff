@@ -40,6 +40,10 @@ public class DefaultHandTypeAnalyzer implements HandTypeAnalyzer {
 
   @Override
   public Hand createHand(List<Card> cards) {
+    if (cards == null || cards.size() != 5) {
+      throw new IllegalArgumentException("must provide exactly 5 cards");
+    }
+
     // determine the type from highest to lowest and match it by the strategy
     return Hand.of(getHandType(cards), cards);
   }

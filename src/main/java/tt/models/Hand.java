@@ -32,7 +32,7 @@ public class Hand {
       throw new IllegalArgumentException("all cards must not be null");
     }
 
-    return new Hand(type, cardsAsSet.toArray(Card[]::new));
+    return new Hand(type, cards.toArray(Card[]::new));
   }
 
   /**

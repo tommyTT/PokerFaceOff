@@ -17,6 +17,11 @@ public class FlushStrategy implements HandTypeStrategy {
 
   @Override
   public boolean matches(List<Card> cards) {
+    // there must be 5 cards in the deck
+    if (cards.size() != 5) {
+      return false;
+    }
+    
     // All the cards must have the same suit
     Map<CardSuit, List<Card>> bySuit = CardUtils.groupCardsBySuit(cards);
     return bySuit.size() == 1;

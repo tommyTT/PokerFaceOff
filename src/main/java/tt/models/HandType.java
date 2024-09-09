@@ -13,7 +13,15 @@ public enum HandType {
   FLUSH("Flush"),
   FULL_HOUSE("Full House"),
   FOUR_OF_A_KIND("Four Of A Kind"),
-  STRAIGHT_FLUSH("Straight Flush"),
+  STRAIGHT_FLUSH("Straight Flush") {
+    @Override
+    public boolean isSubTypeOf(HandType other) {
+      if (other == STRAIGHT || other == FLUSH) {
+        return true;
+      }
+      return super.isSubTypeOf(other);
+    }
+  },
   ;
 
   private final String fullName;
@@ -31,4 +39,7 @@ public enum HandType {
     return fullName;
   }
 
+  public boolean isSubTypeOf(HandType other) {
+    return this == other;
+  }
 }

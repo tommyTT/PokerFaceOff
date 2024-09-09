@@ -4,17 +4,22 @@ import tt.models.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static tt.util.CardUtils.groupCardsByValue;
 
 public class ThreeOfAKindStrategy implements tt.services.impl.hands.HandTypeStrategy {
   private record ThreeOfAKindHand(CardValue triple, CardValue extraCard1, CardValue extraCard2) {
-    public static ThreeOfAKindHand of(Hand hand) {
+    public static Optional<ThreeOfAKindHand> of(Hand hand) {
       if (hand.getType() != HandType.THREE_OF_A_KIND) {
         throw new IllegalArgumentException(
             "this hand is of type " + hand.getType() + " but must be three of a kind!");
       }
-      Map<CardValue, List<Card>> byValue = groupCardsByValue(hand.getCards());
+      return of(hand.getCards());
+    }
+
+    public static Optional<ThreeOfAKindHand> of(List<Card> cards) {
+      Map<CardValue, List<Card>> byValue = groupCardsByValue(cards.stream().distinct().toList());
 
       CardValue triple = null;
       CardValue extraCard1 = null;
@@ -40,50 +45,29 @@ public class ThreeOfAKindStrategy implements tt.services.impl.hands.HandTypeStra
           }
         } else {
           // something is wrong
-          throw new IllegalArgumentException("illegal hand found!");
+          return Optional.empty();
         }
       }
 
-      if (triple == null) {
-        throw new IllegalArgumentException("no triple found!");
-      } else if (extraCard1 == null) {
-        throw new IllegalArgumentException("no high card found!");
-      } else if (extraCard2 == null) {
-        throw new IllegalArgumentException("no low card found!");
+      if (triple == null || extraCard1 == null || extraCard2 == null) {
+        return Optional.empty();
       }
 
-      return new ThreeOfAKindHand(triple, extraCard1, extraCard2);
+      return Optional.of(new ThreeOfAKindHand(triple, extraCard1, extraCard2));
     }
   }
 
   @Override
   public boolean matches(List<Card> cards) {
-    List<Integer> valueCounts = groupCardsByValue(cards).values()
-        .stream()
-        .map(List::size)
-        .sorted()
-        .toList();
-    ;
-
-    // there must be 3 different card values
-    if (valueCounts.size() != 3) {
-      return false;
-    } else if (valueCounts.get(0) != 3) {
-      // there must be a triple
-      return false;
-    } else if (valueCounts.get(1) != 1) {
-      // there must be single extra card
-      return false;
-    } else {
-      // and there must be a second extra card
-      return valueCounts.get(2) == 1;
-    }
+    return ThreeOfAKindHand.of(cards).isPresent();
   }
 
   @Override
   public ShowdownResult determineTiebreakResult(Hand hand1, Hand hand2) {
-    ThreeOfAKindHand threeOfAKindHand1 = ThreeOfAKindHand.of(hand1);
-    ThreeOfAKindHand threeOfAKindHand2 = ThreeOfAKindHand.of(hand2);
+    ThreeOfAKindHand threeOfAKindHand1 = ThreeOfAKindHand.of(hand1)
+        .orElseThrow(() -> new IllegalArgumentException("hand 1 is not three of a kind!"));
+    ThreeOfAKindHand threeOfAKindHand2 = ThreeOfAKindHand.of(hand2)
+        .orElseThrow(() -> new IllegalArgumentException("hand 1 is not three of a kind!"));
 
     // compare the triple, this must always be the tiebreaker since only 4 cards of that value
     // can be present

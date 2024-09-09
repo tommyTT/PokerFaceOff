@@ -19,7 +19,7 @@ public class SinglePairStrategy implements HandTypeStrategy {
     }
 
     public static Optional<SinglePairHand> of(List<Card> cards) {
-      Map<CardValue, List<Card>> byValue = groupCardsByValue(cards);
+      Map<CardValue, List<Card>> byValue = groupCardsByValue(cards.stream().distinct().toList());
 
       CardValue thePair = null;
       List<CardValue> extraCards = new ArrayList<>(3);

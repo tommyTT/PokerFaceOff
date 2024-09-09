@@ -5,6 +5,7 @@ import tt.services.impl.hands.DefaultHandTypeAnalyzer;
 import tt.services.impl.hands.HandTypeStrategy;
 import tt.util.CardUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -22,6 +23,11 @@ public class HighCardStrategy implements HandTypeStrategy {
 
   @Override
   public boolean matches(List<Card> cards) {
+    // there must be 5 cards in the deck
+    if (cards.size() != 5) {
+      return false;
+    }
+
     // there can be no duplicates, otherwise it is at least a pair
     Map<CardValue, List<Card>> byValue = CardUtils.groupCardsByValue(cards);
     if (byValue.size() != cards.size()) {
@@ -39,8 +45,20 @@ public class HighCardStrategy implements HandTypeStrategy {
 
   @Override
   public ShowdownResult determineTiebreakResult(Hand hand1, Hand hand2) {
-    List<CardValue> valuesOfHand1 = hand1.getCards().stream().map(Card::value).sorted().toList();
-    List<CardValue> valuesOfHand2 = hand2.getCards().stream().map(Card::value).sorted().toList();
+    if (hand1.getType() != hand2.getType()) {
+      throw new IllegalArgumentException("both hands must be of equal types!");
+    }
+
+    List<CardValue> valuesOfHand1 = hand1.getCards()
+        .stream()
+        .map(Card::value)
+        .sorted(Comparator.reverseOrder())
+        .toList();
+    List<CardValue> valuesOfHand2 = hand2.getCards()
+        .stream()
+        .map(Card::value)
+        .sorted(Comparator.reverseOrder())
+        .toList();
     if (valuesOfHand1.size() != valuesOfHand2.size()) {
       throw new IllegalArgumentException("Hands have different sizes of card values!");
     }
