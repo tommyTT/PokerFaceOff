@@ -28,5 +28,5 @@
 
 == Zeitplanung
 * 1h Analyse und Konzeption
-* 1h Implementierung
-* 1h Unit Tests
+* 5h Implementierung
+* 4h Unit Tests

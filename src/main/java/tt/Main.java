@@ -50,6 +50,7 @@ public class Main {
   private static Tuple<Integer, DeckCreator> parseArguments(String[] args) {
     if (args.length == 0) {
       // if no arguments are given, then we play heads up with a shuffled deck
+      System.out.println("*the dealer shuffles the deck*");
       return new Tuple<>(2, new DefaultShuffledPokerDeckCreator());
     }
 
@@ -57,6 +58,7 @@ public class Main {
     int numberOfPlayers = Integer.parseInt(args[0]);
     if (args.length == 1) {
       // no more arguments, so we use a shuffled deck
+      System.out.println("*the dealer shuffles the deck*");
       return new Tuple<>(numberOfPlayers, new DefaultShuffledPokerDeckCreator());
     }
 
